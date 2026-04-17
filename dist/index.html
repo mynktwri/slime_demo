@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slime Demo</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
+    }
+
+    #overlay a {
+      color: #888;
+      text-decoration: none;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    #overlay a:hover {
+      color: #aaa;
+      text-decoration: underline;
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/index-BqBRLajp.js"></script>
+</head>
+<body>
+  <div id="overlay">
+    <div>made by Mayank Tiwari</div>
+    <div><a href="https://github.com/mynktwri" target="_blank">github.com/mynktwri</a></div>
+  </div>
+</body>
+</html>

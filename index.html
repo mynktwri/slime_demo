@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slime Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+    }
+
+    /* Settings button */
+    #settingsBtn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border: 1px solid #444;
+      background: #0a0a0a;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      transition: all 0.2s ease;
+      color: #888;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #settingsBtn:hover {
+      border-color: #666;
+      color: #aaa;
+      box-shadow: 0 0 8px rgba(136, 136, 136, 0.2);
+    }
+
+    /* Settings panel */
+    #settingsPanel {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 320px;
+      height: 100vh;
+      background: #0a0a0a;
+      border-left: 1px solid #222;
+      box-shadow: -8px 0 16px rgba(0, 0, 0, 0.8);
+      z-index: 40;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+      padding: 24px;
+      font-family: 'Courier New', monospace;
+      color: #aaa;
+    }
+
+    #settingsPanel.open {
+      right: 0;
+    }
+
+    #settingsPanel h2 {
+      margin: 0 0 24px 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #888;
+      font-weight: normal;
+      border-bottom: 1px solid #222;
+      padding-bottom: 12px;
+    }
+
+    .slider-group {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #777;
+    }
+
+    .slider-value {
+      color: #0f0;
+      font-weight: bold;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: #1a1a1a;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #0f0;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      box-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.3);
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #0f0;
+      border: none;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      box-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+    }
+
+    input[type="range"]::-moz-range-thumb:hover {
+      transform: scale(1.3);
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+    }
+
+    input[type="range"]::-moz-range-track {
+      background: transparent;
+      border: none;
+    }
+
+    .select-group {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .select-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #777;
+    }
+
+    select {
+      width: 100%;
+      padding: 6px 8px;
+      background: #1a1a1a;
+      border: 1px solid #222;
+      border-radius: 2px;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    select:hover {
+      border-color: #333;
+      box-shadow: 0 0 4px rgba(0, 255, 0, 0.2);
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #0f0;
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+    }
+
+    /* Overlay (text) */
+    #overlay {
+      position: fixed;
+      top: 16px;
+      right: 64px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
+    }
+
+    #overlay a {
+      color: #888;
+      text-decoration: none;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    #overlay a:hover {
+      color: #aaa;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <button id="settingsBtn">⚙</button>
+
+  <div id="settingsPanel">
+    <h2>Physics Settings</h2>
+
+    <div class="slider-group">
+      <div class="slider-label">
+        <span>Spring Damping</span>
+        <span class="slider-value" id="dampingValue">0.800</span>
+      </div>
+      <input type="range" id="damping" min="0.8" max="1" step="0.0001" value="0.8">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label">
+        <span>Spring K</span>
+        <span class="slider-value" id="springKValue">200</span>
+      </div>
+      <input type="range" id="springK" min="200" max="10000" step="10" value="200">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label">
+        <span>Substeps</span>
+        <span class="slider-value" id="substepsValue">2</span>
+      </div>
+      <input type="range" id="substeps" min="2" max="10" step="1" value="2">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label">
+        <span>Gravity</span>
+        <span class="slider-value" id="gravityValue">0.0</span>
+      </div>
+      <input type="range" id="gravity" min="-9.8" max="0" step="0.2" value="0.0">
+    </div>
+
+    <div class="slider-group">
+      <div class="slider-label">
+        <span>Drag K</span>
+        <span class="slider-value" id="dragKValue">300</span>
+      </div>
+      <input type="range" id="dragK" min="200" max="500" step="10" value="300">
+    </div>
+
+    <div class="select-group">
+      <div class="select-label">Rest Length</div>
+      <select id="restLength">
+        <option value="dist">dist (1.0x)</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <div>made by Mayank Tiwari</div>
+    <div><a href="https://github.com/mynktwri" target="_blank">github.com/mynktwri</a></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
