@@ -18,7 +18,7 @@ const CONFIG = {
   // Base world-unit size of each sprite.
   // The slime cube spans [-1, 1] per axis (total width = 2 units).
   // Default: 0.08
-  STAR_SIZE: 0.08,
+  STAR_SIZE: 0.06,
 
   // Per-star random size variation added to STAR_SIZE.
   // Each star's final size = STAR_SIZE + random(−variance, +variance).
@@ -34,7 +34,7 @@ const CONFIG = {
   //   0.1 = just below the surface
   //   0.3 = visibly inside (default)
   //   0.9 = near the center of the box
-  INWARD_OFFSET: 0.3,
+  INWARD_OFFSET: 0.6,
 
   // Threshold for detecting whether a coordinate is "on the surface" (at ±1.0).
   // Accounts for floating-point imprecision in BoxGeometry vertex positions.
@@ -43,7 +43,7 @@ const CONFIG = {
 
   // Opacity of each star sprite (0 = invisible, 1 = fully opaque).
   // Default: 0.9
-  STAR_OPACITY: 0.9,
+  STAR_OPACITY: 0.6,
 };
 
 // ============================================================

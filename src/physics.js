@@ -49,7 +49,7 @@ export class Physics {
 
     // Identify and pin corner vertices
     this.pinnedIndices = new Set();
-    // this.pinCorners();
+    this.pinCorners();
 
     // Calculate collision radii (average neighbor distance / 3)
     this.collisionRadii = this.calculateCollisionRadii();
@@ -174,7 +174,7 @@ export class Physics {
         }
       }
 
-      radii[i] = count > 0 ? sumDist / count / 3 : 0.1;
+      radii[i] = count > 0 ? sumDist / count / 2 : 0.1;
     }
 
     return radii;

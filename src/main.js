@@ -6,6 +6,7 @@ import { initPhysics, update as physicsUpdate } from './physics.js';
 import postprocessInstance from './postprocess.js';
 import { Settings } from './settings.js';
 import { StarsSystem } from './starsSystem.js';
+import { VertexOverlay } from './vertexOverlay.js';
 
 // Initialize renderer
 const canvas = document.querySelector('canvas') || createCanvas();
@@ -61,6 +62,9 @@ const physics = initPhysics(geometry);
 // directly, which is the same Float32Array physics writes to every frame.
 const starsSystem = new StarsSystem(renderer.scene, geometry);
 
+// Initialize vertex overlay for visualizing grabbed vertices
+const vertexOverlay = new VertexOverlay(renderer.scene, geometry, physics);
+
 // Initialize postprocess system
 const postprocess = postprocessInstance;
 
@@ -75,6 +79,7 @@ window.slimeMesh = slimeMeshInstance;
 window.postprocess = postprocess;
 window.settings = settings;
 window.starsSystem = starsSystem;
+window.vertexOverlay = vertexOverlay;
 
 console.log('Slime Demo fully initialized');
 console.log('Renderer ready with 320x240 render target + dithering');
@@ -135,6 +140,9 @@ function animate() {
 
   // Move each star sprite to its assigned vertex's current physics position
   starsSystem.update();
+
+  // Update vertex overlay to show grabbed vertices
+  vertexOverlay.update(interaction.grabbedIndex);
 
   // Render scene to low-res render target
   const renderTarget = postprocess.getRenderTarget();

@@ -81,7 +81,7 @@ varying vec3  vViewDir;   // Normalized direction from surface toward camera
 // The shimmer value drives how far along the gradient each pixel lands.
 // ============================================================
 
-const vec3 COLOR_BRIGHT = vec3(0.325, 0.325, 0.678); // #5353ad — peaks of shimmer
+const vec3 COLOR_BRIGHT = vec3(0.325, 0.325, 0.678); // #9393f1 — peaks of shimmer
 const vec3 COLOR_DARK   = vec3(0.0,   0.0,   0.0  ); // #000000 — troughs / shadows
 
 // ============================================================
