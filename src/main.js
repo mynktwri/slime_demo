@@ -100,6 +100,7 @@ function animate() {
 
   // Update slime mesh uniforms
   if (slimeMesh && slimeMesh.material && slimeMesh.material.uniforms) {
+    renderer.camera.updateMatrixWorld();
     slimeMesh.updateMatrixWorld(true); // Force update
 
     // Set all matrices explicitly
